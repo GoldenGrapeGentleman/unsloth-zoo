@@ -164,8 +164,8 @@ def patch_Gemma3Processor():
         input_ids = text_inputs["input_ids"]
         text_inputs["input_ids"] = [x[1:] if x[:2] == double_bos_token_id else x for x in input_ids]
 
-        # Add token type ids manually, as tokenizer can't do arbitrary position token types
-        # [TODO] FAILS for batched tokens since text_inputs["input_ids"] is a list of lists, so np.array creates an object!
+        # Add token type ids manually, as tokenizer can't do arbitrary position token types.
+        # Batched `input_ids` is list[list[int]]; build masks per sequence (np.array would use object dtype for ragged rows).
         if return_mm_token_type_ids:
             input_ids = text_inputs["input_ids"]
             image_token_id = self.image_token_id
