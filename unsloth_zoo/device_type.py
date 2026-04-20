@@ -187,6 +187,11 @@ def _amd_installation_hint():
     lines.append(
         f"uv pip install torch torchvision torchaudio --index-url {index_url} --upgrade --force-reinstall"
     )
+    lines.append(
+        "If uv refuses ROCm wheels (wheel filename validation), set "
+        "UV_SKIP_WHEEL_FILENAME_CHECK=1 for that install — see "
+        "https://github.com/unslothai/unsloth/issues/3520"
+    )
     if index_is_valid:
         lines.append(f"Verified index URL is reachable: {index_url}")
     else:

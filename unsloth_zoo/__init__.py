@@ -125,7 +125,9 @@ if os.environ.get("UNSLOTH_VLLM_STANDBY", "0") == "0":
                 "expandable_segments:True,"\
                 "roundup_power2_divisions:[32:256,64:128,256:64,>:32]"
         if "PYTORCH_HIP_ALLOC_CONF" not in os.environ:
-            # [TODO] Check if AMD works with roundup_power2_divisions
+            # HIP: default matches CUDA's expandable_segments-only strategy. We do not auto-append
+            # `roundup_power2_divisions` (set on CUDA above) until validated across ROCm/PyTorch
+            # combos; set PYTORCH_HIP_ALLOC_CONF yourself to mirror CUDA if you want to test.
             os.environ["PYTORCH_HIP_ALLOC_CONF"] = "expandable_segments:True"
         if "PYTORCH_ALLOC_CONF" not in os.environ:
             os.environ["PYTORCH_ALLOC_CONF"] = "expandable_segments:True"
